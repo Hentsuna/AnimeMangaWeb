@@ -18,7 +18,7 @@ $result = mysqli_query($conn, $sql);
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><?= htmlspecialchars($manga['title']) ?></h5>
                         <p class="card-text text-muted mb-2">Score: <?= $manga['score'] ?></p>
-                        <a href="#" class="btn btn-primary mt-auto">View Details</a>
+                        <a href="manga_detail.php?id=<?= $manga['id'] ?>" class="btn btn-primary mt-auto">View Details</a>
                     </div>
                 </div>
             </div>
