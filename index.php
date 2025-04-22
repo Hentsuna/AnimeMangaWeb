@@ -1,4 +1,5 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php';
+include 'db.php'; ?>
 
 <!-- Main Content -->
 <main class="container py-5">
