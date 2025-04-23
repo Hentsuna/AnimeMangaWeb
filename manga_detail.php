@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 
     if (!$manga) {
         echo "<div class='container my-5'><h2>Manga not found!</h2></div>";
-        include 'footer.php';
+        include 'includes/footer.php';
         exit;
     }
 } else {
