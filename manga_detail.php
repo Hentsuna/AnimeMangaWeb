@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     echo "<div class='container my-5'><h2>Invalid Manga ID!</h2></div>";
-    include 'footer.php';
+    include 'includes/footer.php';
     exit;
 }
 ?>
