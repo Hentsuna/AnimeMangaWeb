@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php session_start(); ?>
 
 <head>
     <meta charset="UTF-8">
@@ -31,9 +32,32 @@
             <form class="d-flex mx-auto w-50">
                 <input class="form-control me-2" type="search" placeholder="Search anime..." aria-label="Search">
             </form>
-            <div>
-                <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
-                <a href="signup.php" class="btn btn-primary">Signup</a>
+            <div class="d-flex">
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <!-- Nếu người dùng đã đăng nhập, hiển thị avatar và tên đăng nhập -->
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- Avatar người dùng -->
+                            <img src="<?= isset($_SESSION['avatar']) ? $_SESSION['avatar'] : '/assets/default-avatar.jpg' ?>" alt="<?= $_SESSION['username'] ?>" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 10px;">
+                            <?= $_SESSION['username'] ?>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile.php">Trang cá nhân</a></li>
+                            <li><a class="dropdown-item" href="logout.php">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <!-- Nếu người dùng chưa đăng nhập, hiển thị nút Login và Signup -->
+                    <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
+                    <a href="register.php" class="btn btn-primary">Signup</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
+
+    <!-- Nội dung trang còn lại sẽ ở dưới -->
+    <!-- Các phần còn lại của nội dung trang -->
+
+</body>
+
+</html>

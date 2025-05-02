@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^([^/]+)-a([0-9]+)\.html$ anime_detail.php?slug=$1&id=$2 [L]
+RewriteRule ^([^/]+)-a([0-9]+)/tap-([0-9]+)\.html$ anime_episode.php?slug=$1&id=$2&episode=$3 [L]

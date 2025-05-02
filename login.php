@@ -1,0 +1,61 @@
+<?php
+include 'includes/header.php';
+include 'db.php'; // Bao gồm file kết nối cơ sở dữ liệu
+
+// Kiểm tra nếu người dùng đã gửi form
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Lấy dữ liệu từ form
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Thực hiện truy vấn để tìm người dùng theo email
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email); // 's' cho kiểu dữ liệu chuỗi
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Kiểm tra xem có người dùng nào không
+    if ($result->num_rows > 0) {
+        // Lấy dữ liệu người dùng
+        $user = $result->fetch_assoc();
+
+        // Kiểm tra mật khẩu
+        if (password_verify($password, $user['password'])) {
+            // Mật khẩu đúng, đăng nhập thành công
+            session_start();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            header('Location: index.php'); // Chuyển hướng đến trang chính
+            exit;
+        } else {
+            $error = "Mật khẩu không đúng!";
+        }
+    } else {
+        $error = "Email không tồn tại!";
+    }
+}
+?>
+
+<main class="container my-5">
+    <h2>Đăng Nhập</h2>
+
+    <?php if (isset($error)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Mật Khẩu</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+    </form>
+
+    <p class="mt-3">Chưa có tài khoản? <a href="register.php">Đăng ký</a></p>
+</main>
+
+<?php include 'includes/footer.php'; ?>

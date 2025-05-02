@@ -27,6 +27,7 @@ if (isset($_GET['id'])) {
     <div class="row">
         <div class="col-md-4">
             <img src="<?= htmlspecialchars($anime['image_url']) ?>" alt="<?= htmlspecialchars($anime['title']) ?>" class="img-fluid rounded shadow">
+            <a href="anime_episodes.php?id=<?= $anime['id'] ?>" class="btn btn-primary mt-3">Xem các tập</a>
         </div>
         <div class="col-md-8">
             <h1><?= htmlspecialchars($anime['title']) ?></h1>
