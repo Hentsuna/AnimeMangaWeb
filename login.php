@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             session_start();
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
             header('Location: index.php'); // Chuyển hướng đến trang chính
             exit;
         } else {
