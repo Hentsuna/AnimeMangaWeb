@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['avatar'] = $user['avatar'];
             header('Location: index.php'); // Chuyển hướng đến trang chính
             exit;
         } else {
@@ -51,10 +52,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="form-group">
             <label for="password">Mật Khẩu</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" maxlength="8"
+                    required onfocus="showHint('passwordHint')" onblur="hideHint('passwordHint')">
+                <span class="input-group-text" onclick="togglePassword('password', 'eyeIconPassword')" style="cursor: pointer;">
+                    <i id="eyeIconPassword" class="bi bi-eye"></i>
+                </span>
+            </div>
+            <small id="passwordHint" class="form-text text-muted" style="display: none;">Mật khẩu tối đa 8 ký tự.</small>
         </div>
+
         <button type="submit" class="btn btn-primary">Đăng Nhập</button>
     </form>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+
+        function showHint(hintId) {
+            document.getElementById(hintId).style.display = "block";
+        }
+
+        function hideHint(hintId) {
+            document.getElementById(hintId).style.display = "none";
+        }
+    </script>
+
 
     <p class="mt-3">Chưa có tài khoản? <a href="register.php">Đăng ký</a></p>
 </main>

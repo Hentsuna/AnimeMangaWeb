@@ -50,14 +50,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="form-group">
             <label for="password">Mật Khẩu</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" maxlength="8" required onfocus="showHint()" onblur="hideHint()">
+                <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                    <i id="eyeIcon" class="bi bi-eye"></i>
+                </span>
+            </div>
+            <small id="passwordHint" class="form-text text-muted" style="display: none;">Mật khẩu tối đa 8 ký tự.</small>
         </div>
+
+
         <div class="form-group">
             <label for="confirm_password">Xác Nhận Mật Khẩu</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" maxlength="8" required>
         </div>
         <button type="submit" class="btn btn-primary">Đăng Ký</button>
     </form>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const icon = document.getElementById("eyeIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+
+        function showHint() {
+            document.getElementById("passwordHint").style.display = "block";
+        }
+
+        function hideHint() {
+            document.getElementById("passwordHint").style.display = "none";
+        }
+    </script>
+
+
+
 
     <p class="mt-3">Đã có tài khoản? <a href="login.php">Đăng nhập</a></p>
 </main>
