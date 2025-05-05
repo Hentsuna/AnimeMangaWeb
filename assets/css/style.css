@@ -30,3 +30,16 @@ body {
     min-width: 0;
     height: 100%;
 }
+
+.border-dark {
+    border: 2px solid #343a40; /* Màu trắng sẫm (hoặc bạn có thể chọn màu khác như #212529) */
+    background-color: #f8f9fa;  /* Màu nền sáng, nếu muốn thay đổi thì chỉnh ở đây */
+}
+
+.p-3 {
+    padding: 1rem; /* Thêm khoảng cách bên trong khung */
+}
+
+.rounded {
+    border-radius: 8px; /* Bo tròn góc khung */
+}

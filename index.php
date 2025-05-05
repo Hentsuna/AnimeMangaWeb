@@ -1,38 +1,93 @@
-<?php include 'includes/header.php';
-include 'db.php'; ?>
+<!DOCTYPE html>
+<html lang="vi">
 
-<!-- Main Content -->
-<main class="container py-5">
-    <h1 class="h2 fw-bold mb-4">Top Anime</h1>
-    <div class="row g-4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyAnimeList Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+</head>
 
-        <?php
-        $animes = [
-            ['id' => 1, 'title' => 'Attack on Titan', 'score' => 9.1, 'image' => 'https://via.placeholder.com/300x400'],
-            ['id' => 2, 'title' => 'One Piece', 'score' => 8.9, 'image' => 'https://via.placeholder.com/300x400'],
-            ['id' => 3, 'title' => 'Naruto', 'score' => 8.2, 'image' => 'https://via.placeholder.com/300x400'],
-            ['id' => 4, 'title' => 'Demon Slayer', 'score' => 8.7, 'image' => 'https://via.placeholder.com/300x400'],
-        ];
-        ?>
+<body>
+    <?php
+    include 'includes/header.php';
+    include 'db.php';
 
-        <?php foreach ($animes as $anime) : ?>
-            <div class="card h-100">
-                <a href="anime.php?id=<?= $anime['id'] ?>">
-                    <img src="<?= $anime['image'] ?>" alt="<?= htmlspecialchars($anime['title']) ?>" class="card-img-top">
-                </a>
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="anime.php?id=<?= $anime['id'] ?>" class="text-decoration-none text-dark">
-                            <?= htmlspecialchars($anime['title']) ?>
-                        </a>
-                    </h5>
-                    <p class="card-text text-muted">Score: <?= $anime['score'] ?></p>
-                </div>
+    // Truy vấn từng nhóm
+    $airing = $conn->query("SELECT * FROM anime WHERE status = 'airing' ORDER BY score DESC LIMIT 5");
+    $upcoming = $conn->query("SELECT * FROM anime WHERE status = 'upcoming' LIMIT 5");
+    $popular = $conn->query("SELECT * FROM anime WHERE status = 'Completed' ORDER BY members DESC LIMIT 5");
+    ?>
+
+
+    <main class="container py-5">
+        <h1 class="h3 fw-bold mb-4">Bảng Xếp Hạng Anime</h1>
+        <div class="row">
+            <!-- Airing -->
+            <div class="col-md-3 border-dark p-3 m-5 rounded">
+                <h5>Top Airing Anime</h5>
+                <?php $i = 1;
+                while ($row = $airing->fetch_assoc()): ?>
+                    <div class="d-flex mb-3">
+                        <span class="fw-bold me-2"><?= $i++ ?>.</span>
+                        <img src="<?= $row['image'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="50" height="70" class="me-2">
+                        <div>
+                            <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
+                            <small class="text-muted">
+                                <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
+                                <?= number_format($row['members']) ?> members
+                            </small>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
             </div>
-        <?php endforeach; ?>
 
+            <!-- Upcoming -->
+            <div class="col-md-3 border-dark p-3 m-5 rounded">
+                <h5>Top Upcoming Anime</h5>
+                <?php $i = 1;
+                while ($row = $upcoming->fetch_assoc()): ?>
+                    <div class="d-flex mb-3">
+                        <span class="fw-bold me-2"><?= $i++ ?>.</span>
+                        <img src="<?= $row['image'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="50" height="70" class="me-2">
+                        <div>
+                            <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
+                            <small class="text-muted">
+                                <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
+                                <?= number_format($row['members']) ?> members
+                            </small>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
 
-    </div>
-</main>
+            <!-- Popular -->
+            <div class="col-md-3 border-dark p-3 m-5 rounded">
+                <h5>Most Popular Anime</h5>
+                <?php
+                $i = 1;
+                while ($row = $popular->fetch_assoc()): ?>
+                    <div class="d-flex mb-3">
+                        <span class="fw-bold me-2"><?= $i++ ?>.</span>
+                        <img src="<?= $row['image'] ?>" alt="<?= htmlspecialchars($row['title']) ?>" width="50" height="70" class="me-2">
+                        <div>
+                            <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
+                            <small class="text-muted">
+                                <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
+                                <?= number_format($row['members']) ?> members
+                            </small>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
 
-<?php include 'includes/footer.php'; ?>
+        </div>
+    </main>
+
+    <?php include 'includes/footer.php'; ?>
+
+</body>
+
+</html>
