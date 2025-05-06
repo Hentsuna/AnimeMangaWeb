@@ -1,9 +1,9 @@
-
 <?php
 include 'includes/header.php';
 include 'db.php';
 
-function time_elapsed_string($datetime, $full = false) {
+function time_elapsed_string($datetime, $full = false)
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -61,25 +61,44 @@ while ($row = $genre_result->fetch_assoc()) {
     $genres[] = $row['name'];
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id'])) {
-    $anime_id = (int)$_POST['anime_id'];
-    $user_id = $_SESSION['user_id']; // Tạm thời dùng ID ảo, bạn cần thay bằng session hoặc đăng nhập
-
-    // Kiểm tra trùng
-    $check = $conn->prepare("SELECT * FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
+$is_favorited = false;
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $check = $conn->prepare("SELECT 1 FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
     $check->bind_param("ii", $user_id, $anime_id);
     $check->execute();
     $check_result = $check->get_result();
+    $is_favorited = $check_result->num_rows > 0;
+}
 
-    if ($check_result->num_rows === 0) {
-        $stmt = $conn->prepare("INSERT INTO anime_favorites (user_id, anime_id) VALUES (?, ?)");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset($_SESSION['user_id'])) {
+    $anime_id = (int)$_POST['anime_id'];
+    $user_id = $_SESSION['user_id'];
+
+    if (isset($_POST['unfavorite'])) {
+        // Huỷ yêu thích
+        $stmt = $conn->prepare("DELETE FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
         $stmt->bind_param("ii", $user_id, $anime_id);
         $stmt->execute();
+    } else {
+        // Thêm yêu thích nếu chưa có
+        $check = $conn->prepare("SELECT 1 FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
+        $check->bind_param("ii", $user_id, $anime_id);
+        $check->execute();
+        $check_result = $check->get_result();
+
+        if ($check_result->num_rows === 0) {
+            $stmt = $conn->prepare("INSERT INTO anime_favorites (user_id, anime_id) VALUES (?, ?)");
+            $stmt->bind_param("ii", $user_id, $anime_id);
+            $stmt->execute();
+        }
     }
 
     header("Location: anime_detail.php?id=" . $anime_id);
     exit;
 }
+
 ?>
 
 <main class="container my-5">
@@ -115,13 +134,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id'])) {
             </div>
             <p><strong>Description:</strong><br><?= nl2br(htmlspecialchars($anime['description'])) ?></p>
 
-            <!-- Nút thêm vào danh sách yêu thích -->
-            <form method="post" class="mt-3">
-                <input type="hidden" name="anime_id" value="<?= $anime['id'] ?>">
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-heart-fill me-1"></i> Thêm vào yêu thích
-                </button>
-            </form>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <form method="post" class="mt-3">
+                    <input type="hidden" name="anime_id" value="<?= $anime['id'] ?>">
+                    <?php if ($is_favorited): ?>
+                        <button type="submit" name="unfavorite" value="1" class="btn btn-danger">
+                            <i class="bi bi-heartbreak-fill me-1"></i> Huỷ yêu thích
+                        </button>
+                    <?php else: ?>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-heart-fill me-1"></i> Thêm vào yêu thích
+                        </button>
+                    <?php endif; ?>
+                </form>
+            <?php endif; ?>
+
         </div>
     </div>
 

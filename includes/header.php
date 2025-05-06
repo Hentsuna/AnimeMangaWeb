@@ -45,6 +45,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="profile.php">Trang cá nhân</a></li>
                             <li><a class="dropdown-item" href="anime_favorites.php">Anime yêu thích</a></li>
+                            <li><a class="dropdown-item" href="manga_favorites.php">Manga yêu thích</a></li>
                             <li><a class="dropdown-item" href="logout.php">Đăng xuất</a></li>
                         </ul>
                     </div>

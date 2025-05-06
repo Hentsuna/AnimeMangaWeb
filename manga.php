@@ -24,7 +24,7 @@ $result = mysqli_query($conn, $sql);
         <?php while ($manga = mysqli_fetch_assoc($result)) : ?>
             <div class="col-6 col-md-4 col-lg-3">
                 <div class="card h-100 shadow-sm">
-                    <img src="<?= htmlspecialchars($manga['image_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($manga['title']) ?>" style="height: 300px; object-fit: cover;">
+                    <img src="<?= htmlspecialchars($manga['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($manga['title']) ?>" style="height: 300px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><?= htmlspecialchars($manga['title']) ?></h5>
                         <p class="card-text text-muted mb-2">Score: <?= $manga['score'] ?></p>
