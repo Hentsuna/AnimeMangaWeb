@@ -10,3 +10,10 @@
 .rounded {
     border-radius: 8px; /* Bo tròn góc khung */
 }
+footer a {
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
+footer a:hover {
+    color: #ccc; /* Màu khi hover */
+}

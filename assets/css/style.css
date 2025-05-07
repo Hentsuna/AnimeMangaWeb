@@ -1,36 +1,3 @@
-/* Thêm các kiểu dáng dưới đây vào file style.css của bạn */
-
-body {
-    overflow: hidden !important;
-}
-
-#load_bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #697aa4;
-    z-index: 1000;
-}
-
-#load_box {
-    display: flex;
-    position: fixed;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 1001;
-    height: calc(100vw / 5);
-    max-height: 150px;
-}
-
-#load_box>img {
-    min-width: 0;
-    height: 100%;
-}
-
 .border-dark {
     border: 2px solid #343a40; /* Màu trắng sẫm (hoặc bạn có thể chọn màu khác như #212529) */
     background-color: #f8f9fa;  /* Màu nền sáng, nếu muốn thay đổi thì chỉnh ở đây */
@@ -42,4 +9,11 @@ body {
 
 .rounded {
     border-radius: 8px; /* Bo tròn góc khung */
+}
+footer a {
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
+footer a:hover {
+    color: #ccc; /* Màu khi hover */
 }

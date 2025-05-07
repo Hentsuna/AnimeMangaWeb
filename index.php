@@ -7,13 +7,15 @@
     <title>MyAnimeList Clone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
     <?php
     include 'includes/header.php';
     include 'db.php';
+
+    $top_manga = $conn->query("SELECT * FROM manga ORDER BY score DESC LIMIT 20");
 
     // Truy vấn từng nhóm
     $airing = $conn->query("SELECT * FROM anime WHERE status = 'airing' ORDER BY score DESC LIMIT 5");
@@ -23,7 +25,35 @@
 
 
     <main class="container py-5">
-        <h1 class="h3 fw-bold mb-4">Bảng Xếp Hạng Anime</h1>
+        <h2 class="h4 fw-bold mb-3">Top Manga</h2>
+        <div class="position-relative">
+            <button class="btn btn-danger position-absolute top-50 start-0 translate-middle-y z-3 d-flex align-items-center justify-content-center"
+                id="scrollLeft" style="width: 40px; height: 40px; padding: 0;">
+                <i class="bi bi-chevron-left fs-4"></i>
+            </button>
+
+
+            <div class="d-flex overflow-auto px-5" id="mangaCarousel" style="scroll-behavior: smooth;">
+                <?php while ($manga = $top_manga->fetch_assoc()): ?>
+                    <div class="card mx-2" style="min-width: 180px;">
+                        <img src="<?= $manga['image'] ?>" class="card-img-top" style="height: 240px; object-fit: cover;">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-truncate mb-1" title="<?= htmlspecialchars($manga['title']) ?>">
+                                <a href="manga_detail.php?id=<?= $manga['id'] ?>" class="text-decoration-none fw-bold"><?= htmlspecialchars($manga['title']) ?></a>
+                            </h6>
+                            <p class="mb-0"><i class="bi bi-star-fill text-warning"></i> <?= $manga['score'] ?></p>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+
+            <button class="btn btn-danger position-absolute top-50 end-0 translate-middle-y z-3 d-flex align-items-center justify-content-center"
+                id="scrollRight" style="width: 40px; height: 40px; padding: 0;">
+                <i class="bi bi-chevron-right fs-4"></i>
+            </button>
+        </div>
+
+        <h1 class="h3 fw-bold mt-4">Bảng Xếp Hạng Anime</h1>
         <div class="row">
             <!-- Airing -->
             <div class="col-md-3 border-dark p-3 m-5 rounded">
@@ -87,6 +117,18 @@
     </main>
 
     <?php include 'includes/footer.php'; ?>
+
+    <script>
+        const carousel = document.getElementById('mangaCarousel');
+        document.getElementById('scrollLeft').onclick = () => carousel.scrollBy({
+            left: -300,
+            behavior: 'smooth'
+        });
+        document.getElementById('scrollRight').onclick = () => carousel.scrollBy({
+            left: 300,
+            behavior: 'smooth'
+        });
+    </script>
 
 </body>
 

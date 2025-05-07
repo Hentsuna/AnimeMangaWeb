@@ -6,12 +6,12 @@ include 'db.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 $type = ($current_page === 'anime.php') ? 'anime' : (($current_page === 'manga.php') ? 'manga' : '');
-$show_filters = in_array($type, ['anime', 'manga']);
+$show_filters = true;
 
 $genres = $directors = $seasons = $authors = [];
 
+$genres = $conn->query("SELECT id, name FROM genre ORDER BY name")->fetch_all(MYSQLI_ASSOC);
 if ($type === 'anime') {
-    $genres = $conn->query("SELECT id, name FROM genre ORDER BY name")->fetch_all(MYSQLI_ASSOC);
     $directors = $conn->query("SELECT id, name FROM directors ORDER BY name")->fetch_all(MYSQLI_ASSOC);
     $seasons = $conn->query("
     SELECT DISTINCT s.id, s.name 
@@ -20,7 +20,6 @@ if ($type === 'anime') {
     ORDER BY s.name DESC
 ")->fetch_all(MYSQLI_ASSOC);
 } elseif ($type === 'manga') {
-    $genres = $conn->query("SELECT id, name FROM genre ORDER BY name")->fetch_all(MYSQLI_ASSOC);
     $authors = $conn->query("SELECT id, name FROM authors ORDER BY name")->fetch_all(MYSQLI_ASSOC);
 }
 ?>
@@ -48,51 +47,51 @@ if ($type === 'anime') {
                     <li class="nav-item"><a class="nav-link<?= $type === 'anime' ? ' active' : '' ?>" href="anime.php">Anime</a></li>
                     <li class="nav-item"><a class="nav-link<?= $type === 'manga' ? ' active' : '' ?>" href="manga.php">Manga</a></li>
 
-                    <?php if ($show_filters): ?>
-                        <!-- Thể loại -->
+                    <!-- Luôn hiển thị Thể loại -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thể loại</a>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($genres as $g): ?>
+                                <li><a class="dropdown-item" href="search.php?type=<?= $type ?: 'anime' ?>&genre_id=<?= $g['id'] ?>">
+                                        <?= htmlspecialchars($g['name']) ?>
+                                    </a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+
+                    <?php if ($type === 'anime'): ?>
+                        <!-- Đạo diễn -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thể loại</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Đạo diễn</a>
                             <ul class="dropdown-menu">
-                                <?php foreach ($genres as $g): ?>
-                                    <li><a class="dropdown-item" href="search.php?type=<?= $type ?>&genre_id=<?= $g['id'] ?>"><?= htmlspecialchars($g['name']) ?></a></li>
+                                <?php foreach ($directors as $d): ?>
+                                    <li><a class="dropdown-item" href="search.php?type=anime&director_id=<?= $d['id'] ?>"><?= htmlspecialchars($d['name']) ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </li>
-
-                        <?php if ($type === 'anime'): ?>
-                            <!-- Đạo diễn -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Đạo diễn</a>
-                                <ul class="dropdown-menu">
-                                    <?php foreach ($directors as $d): ?>
-                                        <li><a class="dropdown-item" href="search.php?type=anime&director_id=<?= $d['id'] ?>"><?= htmlspecialchars($d['name']) ?></a></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </li>
-                            <!-- Mùa -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Mùa</a>
-                                <ul class="dropdown-menu">
-                                    <?php foreach ($seasons as $season): ?>
-                                        <li><a class="dropdown-item" href="search.php?type=anime&season_id=<?= $season['id'] ?>">
-                                                <?= htmlspecialchars($season['name']) ?>
-                                            </a></li>
-                                    <?php endforeach; ?>
-
-                                </ul>
-                            </li>
-                        <?php elseif ($type === 'manga'): ?>
-                            <!-- Tác giả -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tác giả</a>
-                                <ul class="dropdown-menu">
-                                    <?php foreach ($authors as $a): ?>
-                                        <li><a class="dropdown-item" href="search.php?type=manga&author_id=<?= $a['id'] ?>"><?= htmlspecialchars($a['name']) ?></a></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </li>
-                        <?php endif; ?>
+                        <!-- Mùa -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Mùa</a>
+                            <ul class="dropdown-menu">
+                                <?php foreach ($seasons as $season): ?>
+                                    <li><a class="dropdown-item" href="search.php?type=anime&season_id=<?= $season['id'] ?>">
+                                            <?= htmlspecialchars($season['name']) ?>
+                                        </a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    <?php elseif ($type === 'manga'): ?>
+                        <!-- Tác giả -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tác giả</a>
+                            <ul class="dropdown-menu">
+                                <?php foreach ($authors as $a): ?>
+                                    <li><a class="dropdown-item" href="search.php?type=manga&author_id=<?= $a['id'] ?>"><?= htmlspecialchars($a['name']) ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
                     <?php endif; ?>
+
                 </ul>
             </div>
 

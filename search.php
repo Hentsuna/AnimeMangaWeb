@@ -139,4 +139,23 @@ function render_items($items, $type) {
     <?php endif; ?>
 </main>
 
+<?php
+$total_items = max($total_anime, $total_manga);
+$total_pages = ceil($total_items / $limit);
+
+if ($total_pages > 1): ?>
+    <nav>
+        <ul class="pagination justify-content-center">
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                    <a class="page-link"
+                       href="?keyword=<?= urlencode($keyword) ?>&genre_id=<?= urlencode($genre_id) ?>&director_id=<?= urlencode($director_id) ?>&author_id=<?= urlencode($author_id) ?>&page=<?= $i ?>">
+                        <?= $i ?>
+                    </a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
+<?php endif; ?>
+
 <?php include 'includes/footer.php'; ?>
