@@ -49,6 +49,13 @@
     } else {
         include 'login.php';
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act']) && $_POST['act'] === 'true') {
+        session_unset();
+        session_destroy();
+        header('Location: index.php');
+        exit;
+    }
     ?>
 </body>
 
