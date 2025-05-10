@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+ob_start();
 session_start();
 include 'db.php';
 
@@ -186,7 +187,7 @@ if ($type === 'anime') {
 
     <!-- Nội dung trang còn lại sẽ ở dưới -->
     <!-- Các phần còn lại của nội dung trang -->
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
