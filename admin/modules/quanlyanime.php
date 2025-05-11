@@ -7,15 +7,24 @@ $sort_order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
 
 // Mapping tên cột để dùng trong ORDER BY
 switch ($sort_column) {
-    case 'season_name':  $order_by = 's.name'; break;
-    case 'director_name': $order_by = 'd.name'; break;
-    case 'members':      $order_by = 'members'; break;
+    case 'season_name':
+        $order_by = 's.name';
+        break;
+    case 'director_name':
+        $order_by = 'd.name';
+        break;
+    case 'members':
+        $order_by = 'members';
+        break;
     case 'title':
     case 'score':
     case 'episodes':
     case 'status':
-    case 'id':           $order_by = "a.$sort_column"; break;
-    default:             $order_by = "a.id";
+    case 'id':
+        $order_by = "a.$sort_column";
+        break;
+    default:
+        $order_by = "a.id";
 }
 
 $order_dir = strtoupper($sort_order) === 'DESC' ? 'DESC' : 'ASC';
@@ -35,7 +44,8 @@ $query = "SELECT a.*,
 $result = mysqli_query($conn, $query);
 
 // Hàm tạo link sắp xếp
-function sort_link($column, $label) {
+function sort_link($column, $label)
+{
     $base = "index.php?chucnang=quanlyanime";
     $current_sort = $_GET['sort'] ?? '';
     $current_order = $_GET['order'] ?? 'asc';
@@ -46,16 +56,34 @@ function sort_link($column, $label) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Quản lý Anime</title>
     <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th a { text-decoration: none; color: black; }
-        .actions button { margin-right: 5px; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .actions button {
+            margin-right: 5px;
+        }
     </style>
 </head>
+
 <body>
     <h2>Quản lý Anime</h2>
     <table>
@@ -83,11 +111,12 @@ function sort_link($column, $label) {
                 <td><?= $row['director_name'] ?></td>
                 <td><?= $row['members'] ?></td>
                 <td class="actions">
-                    <a href="edit_anime.php?id=<?= $row['id'] ?>"><button>Sửa</button></a>
+                    <a href="index.php?chucnang=edit_anime&id=<?= $row['id'] ?>"><button>Sửa</button></a>
                     <a href="delete_anime.php?id=<?= $row['id'] ?>" onclick="return confirm('Xoá anime này?')"><button>Xoá</button></a>
                 </td>
             </tr>
         <?php endwhile; ?>
     </table>
 </body>
+
 </html>

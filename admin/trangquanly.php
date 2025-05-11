@@ -149,7 +149,7 @@
                     elseif ($see == "quanlyanime") include "modules/quanlyanime.php";
                     elseif ($see == "quanlymanga") include "modules/quanlymanga.php";
                     elseif ($see == "suathongtinsach") include "modules/editinfobook.php";
-                    elseif ($see == "quanlychuong") include "modules/quanlychuong.php";
+                    elseif ($see == "edit_anime") include "modules/edit_anime.php";
                     elseif ($see == "addanime") include "modules/addanime.php";
                     elseif ($see == "addmanga") include "modules/addmanga.php";
                     elseif ($see == "duyetsach") include "modules/duyetsachthanhvien.php";
