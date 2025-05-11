@@ -11,11 +11,21 @@
             <br>
 
             <form method="get" action="#">
-                <input name="chucnang" value="themsach" style="display: none">
+                <input name="chucnang" value="addanime" style="display: none">
                 <button class="btnkgvien">
                     <div class="line-menu" style="color:#fff;">
                         <i style="margin-right: 5px" class="fas fa-plus-square"></i>
-                        Thêm sách
+                        Thêm anime
+                    </div>
+                </button>
+            </form>
+
+            <form method="get" action="#">
+                <input name="chucnang" value="addmanga" style="display: none">
+                <button class="btnkgvien">
+                    <div class="line-menu" style="color:#fff;">
+                        <i style="margin-right: 5px" class="fas fa-plus-square"></i>
+                        Thêm manga
                     </div>
                 </button>
             </form>
@@ -40,11 +50,20 @@
             </form>';
             ?>
             <form method="get" action="#">
-                <input name="chucnang" value="quanlysach" style="display: none">
+                <input name="chucnang" value="quanlyanime" style="display: none">
                 <button class="btnkgvien">
                     <div class="line-menu" style="color:#fff;">
                         <i class="fas fa-th-list"></i>
-                        Quản lý sách<div>
+                        Quản lý anime<div>
+                </button>
+            </form>
+
+            <form method="get" action="#">
+                <input name="chucnang" value="quanlymanga" style="display: none">
+                <button class="btnkgvien">
+                    <div class="line-menu" style="color:#fff;">
+                        <i class="fas fa-th-list"></i>
+                        Quản lý manga<div>
                 </button>
             </form>
             <?php if ($_SESSION['user_role'] === 'admin') echo '
@@ -127,10 +146,12 @@
                             getthe.style.display = \'block\';</script>';
                     } elseif ($see == "thaydoimatkhau") include "modules/thaydoimatkhau.php";
                     elseif ($see == "theloai") include "modules/theloai.php";
-                    elseif ($see == "quanlysach") include "modules/quanlysach.php";
+                    elseif ($see == "quanlyanime") include "modules/quanlyanime.php";
+                    elseif ($see == "quanlymanga") include "modules/quanlymanga.php";
                     elseif ($see == "suathongtinsach") include "modules/editinfobook.php";
                     elseif ($see == "quanlychuong") include "modules/quanlychuong.php";
-                    elseif ($see == "themsach") include "modules/newbook.php";
+                    elseif ($see == "addanime") include "modules/addanime.php";
+                    elseif ($see == "addmanga") include "modules/addmanga.php";
                     elseif ($see == "duyetsach") include "modules/duyetsachthanhvien.php";
                     elseif ($see == "thaydoilogo") {
                         include "modules/thaydoilogo.php";
