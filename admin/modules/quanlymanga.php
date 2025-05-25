@@ -76,8 +76,8 @@ function sort_link($column, $label) {
                 <td><?= $row['volumes'] ?></td>
                 <td><?= $row['members'] ?></td>
                 <td class="actions">
-                    <a href="sua_manga.php?id=<?= $row['id'] ?>"><button>Sửa</button></a>
-                    <a href="xoa_manga.php?id=<?= $row['id'] ?>" onclick="return confirm('Xoá manga này?')"><button>Xoá</button></a>
+                    <a href="index.php?chucnang=edit_manga&id=<?= $row['id'] ?>"><button>Sửa</button></a>
+                    <a href="index.php?chucnang=delete_manga&id=<?= $row['id'] ?>" onclick="return confirm('Xoá manga này?')"><button>Xoá</button></a>
                 </td>
             </tr>
         <?php endwhile; ?>

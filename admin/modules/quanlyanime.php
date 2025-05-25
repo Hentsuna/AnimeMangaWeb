@@ -1,5 +1,9 @@
 <?php
 include("../db.php");
+if (isset($_SESSION['delete_message'])) {
+    echo $_SESSION['delete_message']; // Hiển thị thông báo
+    unset($_SESSION['delete_message']); // Xóa thông báo sau khi hiển thị
+}
 
 // Xử lý sắp xếp
 $sort_column = $_GET['sort'] ?? 'id';
@@ -112,7 +116,7 @@ function sort_link($column, $label)
                 <td><?= $row['members'] ?></td>
                 <td class="actions">
                     <a href="index.php?chucnang=edit_anime&id=<?= $row['id'] ?>"><button>Sửa</button></a>
-                    <a href="delete_anime.php?id=<?= $row['id'] ?>" onclick="return confirm('Xoá anime này?')"><button>Xoá</button></a>
+                    <a href="index.php?chucnang=delete_anime&id=<?= $row['id'] ?>" onclick="return confirm('Xoá anime này?')"><button>Xoá</button></a>
                 </td>
             </tr>
         <?php endwhile; ?>

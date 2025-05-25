@@ -39,7 +39,53 @@
                         Quản lý thể loại</div>
                 </button>
             </form>';
+            if ($_SESSION['user_role'] === 'admin')
+                echo '<button onclick="hienthi()"  class="btnkgvien" >
+                    <div class="line-menu" style="color:#fff;">
+                        <i class="fab fa-blogger-b"></i>
+                        Tùy chỉnh Web</div>
+                </button>' ?>
 
+            <div id="tuychon" style="display: none">
+                <div style="margin-left: 18px;">
+                    <form method="get" action="#">
+                        <input name="chucnang" value="quanlytheloai" style="display: none">
+                        <button class="btnkgvien">
+                            <div class="line-menu-lv2" style="color:#f8f8f8;">
+                                <i class="fas fa-edit"></i>
+                                Quản lý thể loại<div>
+                        </button>
+                    </form>
+                    <form method="get" action="#">
+                        <input name="chucnang" value="quanlytacgia" style="display: none">
+                        <button class="btnkgvien">
+                            <div class="line-menu-lv2" style="color:#f8f8f8;">
+                                <i class="fas fa-edit"></i>
+                                Quản lý tác giả<div>
+                        </button>
+                    </form>
+                    <form method="get" action="#">
+                        <input name="chucnang" value="quanlydaodien" style="display: none">
+                        <button class="btnkgvien">
+                            <div class="line-menu-lv2" style="color:#f8f8f8;">
+                                <i class="fas fa-tools"></i>
+                                Quản lý đạo diễn
+                            </div>
+                        </button>
+                    </form>
+                    <form method="get" action="#">
+                        <input name="chucnang" value="tuychonmenu" style="display: none">
+                        <button class="btnkgvien">
+                            <div class="line-menu-lv2" style="color:#f8f8f8;">
+                                <i class="fas fa-hourglass-start"></i>
+                                Tùy chọn menu
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <?php
             echo '<form method="get" action="#">
                 <input name = "chucnang" value="duyetsach" style="display: none">
                 <button class="btnkgvien">
@@ -115,7 +161,7 @@
             </div>
             <form method="post" action="">
                 <input name="act" value="true" type="hidden">
-                <button class="btnkgvien" type="submit">
+                <button class="btnkgvien">
                     <div class="line-menu" style="color:#ee1111;">
                         <i class="fas fa-sign-out-alt"></i>
                         Đăng xuất
@@ -150,9 +196,30 @@
                     elseif ($see == "quanlymanga") include "modules/quanlymanga.php";
                     elseif ($see == "suathongtinsach") include "modules/editinfobook.php";
                     elseif ($see == "edit_anime") include "modules/edit_anime.php";
+                    elseif ($see == "edit_manga") include "modules/edit_manga.php";
+                    elseif ($see == "delete_anime") include "modules/delete_anime.php";
+                    elseif ($see == "delete_manga") include "modules/delete_manga.php";
+                    elseif ($see == "delete_theloai") include "modules/delete_theloai.php";
+                    elseif ($see == "delete_tacgia") include "modules/delete_tacgia.php";
+                    elseif ($see == "delete_daodien") include "modules/delete_daodien.php";
                     elseif ($see == "addanime") include "modules/addanime.php";
                     elseif ($see == "addmanga") include "modules/addmanga.php";
                     elseif ($see == "duyetsach") include "modules/duyetsachthanhvien.php";
+                    elseif ($see == "quanlytheloai") {
+                        include "modules/quanlytheloai.php";
+                        echo '<script> var getthe = document.getElementById(\'tuychon\');
+                            getthe.style.display = \'block\';</script>';
+                    }
+                    elseif ($see == "quanlytacgia") {
+                        include "modules/quanlytacgia.php";
+                        echo '<script> var getthe = document.getElementById(\'tuychon\');
+                            getthe.style.display = \'block\';</script>';
+                    }
+                    elseif ($see == "quanlydaodien") {
+                        include "modules/quanlydaodien.php";
+                        echo '<script> var getthe = document.getElementById(\'tuychon\');
+                            getthe.style.display = \'block\';</script>';
+                    }
                     elseif ($see == "thaydoilogo") {
                         include "modules/thaydoilogo.php";
                         echo '<script> var getthe = document.getElementById(\'tuychonweb\');
@@ -182,6 +249,13 @@
 <script>
     function hienthiweb() {
         var getthe = document.getElementById('tuychonweb');
+        if (getthe.style.display == 'none') getthe.style.display = 'block';
+        else getthe.style.display = 'none';
+
+    }
+
+    function hienthi() {
+        var getthe = document.getElementById('tuychon');
         if (getthe.style.display == 'none') getthe.style.display = 'block';
         else getthe.style.display = 'none';
 
