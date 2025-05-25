@@ -63,6 +63,7 @@ $manga_items = $result->fetch_all(MYSQLI_ASSOC);
 $stmt = $conn->query("SELECT FOUND_ROWS() as total");
 $total_manga = $stmt->fetch_assoc()['total'];
 
+
 function render_items($items, $type) {
     foreach ($items as $item) {
         echo '<div class="col-6 col-md-4 col-lg-3">';
@@ -78,7 +79,6 @@ function render_items($items, $type) {
 ?>
 
 <main class="container my-5">
-    <h1 class="text-center mb-4">Kết quả tìm kiếm cho "<?= htmlspecialchars($keyword) ?>"</h1>
 
     <form class="row g-3 mb-4" method="GET">
         <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword) ?>">

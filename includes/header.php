@@ -15,10 +15,7 @@ $genres = $conn->query("SELECT id, name FROM genre ORDER BY name")->fetch_all(MY
 if ($type === 'anime') {
     $directors = $conn->query("SELECT id, name FROM directors ORDER BY name")->fetch_all(MYSQLI_ASSOC);
     $seasons = $conn->query("
-    SELECT DISTINCT s.id, s.name 
-    FROM anime a 
-    JOIN seasons s ON a.season_id = s.id 
-    ORDER BY s.name DESC
+    SELECT id, name FROM seasons ORDER BY name
 ")->fetch_all(MYSQLI_ASSOC);
 } elseif ($type === 'manga') {
     $authors = $conn->query("SELECT id, name FROM authors ORDER BY name")->fetch_all(MYSQLI_ASSOC);

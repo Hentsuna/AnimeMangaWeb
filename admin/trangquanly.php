@@ -30,20 +30,12 @@
                 </button>
             </form>
 
-            <?php if ($_SESSION['user_role'] === 'admin') echo '
-            <form method="get" action="#">
-                <input name = "chucnang" value="theloai" style="display: none">
-                <button class="btnkgvien">
-                    <div class="line-menu" style="color:#fff;">
-                        <i style="margin-right: 5px" class="fab fa-pied-piper-square"></i>
-                        Quản lý thể loại</div>
-                </button>
-            </form>';
+            <?php if ($_SESSION['user_role'] === 'admin') 
             if ($_SESSION['user_role'] === 'admin')
                 echo '<button onclick="hienthi()"  class="btnkgvien" >
                     <div class="line-menu" style="color:#fff;">
                         <i class="fab fa-blogger-b"></i>
-                        Tùy chỉnh Web</div>
+                        Tùy chỉnh</div>
                 </button>' ?>
 
             <div id="tuychon" style="display: none">
@@ -91,7 +83,7 @@
                 <button class="btnkgvien">
                     <div class="line-menu" style="color:#fff;">
                         <i style="margin-right: 5px" class="fas fa-umbrella"></i>
-                        Duyệt sách thành viên</div>
+                        Người dùng</div>
                 </button>
             </form>';
             ?>
@@ -112,53 +104,7 @@
                         Quản lý manga<div>
                 </button>
             </form>
-            <?php if ($_SESSION['user_role'] === 'admin') echo '
-            <form method="get" action="#">
-                <input name = "chucnang" value="thaydoimatkhau" style="display: none">
-                <button class="btnkgvien">
-                    <div class="line-menu" style="color:#fff;">
-                        <i class="fas fa-key"></i>
-                         Thay đổi mật khẩu<div>
-                </button>
-            </form> ' ?>
-            <?php if ($_SESSION['user_role'] === 'admin')
-                echo '<button onclick="hienthiweb()"  class="btnkgvien" >
-                    <div class="line-menu" style="color:#fff;">
-                        <i class="fab fa-blogger-b"></i>
-                        Tùy chỉnh Web</div>
-                </button>'
-            ?>
-
-            <div id="tuychonweb" style="display: none">
-                <div style="margin-left: 18px;">
-                    <form method="get" action="#">
-                        <input name="chucnang" value="thaydoilogo" style="display: none">
-                        <button class="btnkgvien">
-                            <div class="line-menu-lv2" style="color:#f8f8f8;">
-                                <i class="fas fa-edit"></i>
-                                Thay đổi logo<div>
-                        </button>
-                    </form>
-                    <form method="get" action="#">
-                        <input name="chucnang" value="thaydoifavicon" style="display: none">
-                        <button class="btnkgvien">
-                            <div class="line-menu-lv2" style="color:#f8f8f8;">
-                                <i class="fas fa-tools"></i>
-                                Thay đổi favicon
-                            </div>
-                        </button>
-                    </form>
-                    <form method="get" action="#">
-                        <input name="chucnang" value="tuychonmenu" style="display: none">
-                        <button class="btnkgvien">
-                            <div class="line-menu-lv2" style="color:#f8f8f8;">
-                                <i class="fas fa-hourglass-start"></i>
-                                Tùy chọn menu
-                            </div>
-                        </button>
-                    </form>
-                </div>
-            </div>
+            
             <form method="post" action="">
                 <input name="act" value="true" type="hidden">
                 <button class="btnkgvien">

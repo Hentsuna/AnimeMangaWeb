@@ -38,11 +38,6 @@
         }
     }
 
-    if (isset($_POST['act']) && $_POST['act'] === 'logout') {
-        session_destroy();
-        header("Location: index.php");
-        exit();
-    }
 
     if (isset($_SESSION['loginadmin']) && $_SESSION['user_role'] === 'admin') {
         include 'trangquanly.php';
