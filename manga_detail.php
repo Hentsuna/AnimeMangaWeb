@@ -45,7 +45,7 @@ if ($result->num_rows === 0) {
 
 $manga = $result->fetch_assoc();
 
-// Lấy genre
+// Lấy thể loại
 $genre_stmt = $conn->prepare("SELECT g.name FROM genre g
                               INNER JOIN manga_genre mg ON g.id = mg.genre_id
                               WHERE mg.manga_id = ?");
@@ -57,16 +57,17 @@ while ($row = $genre_result->fetch_assoc()) {
     $genres[] = $row['name'];
 }
 
+// Kiểm tra yêu thích
 $is_favorited = false;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $check = $conn->prepare("SELECT 1 FROM manga_favorites WHERE user_id = ? AND manga_id = ?");
     $check->bind_param("ii", $user_id, $manga_id);
     $check->execute();
-    $check_result = $check->get_result();
-    $is_favorited = $check_result->num_rows > 0;
+    $is_favorited = $check->get_result()->num_rows > 0;
 }
 
+// Xử lý yêu thích
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset($_SESSION['user_id'])) {
     $manga_id = (int)$_POST['manga_id'];
     $user_id = $_SESSION['user_id'];
@@ -79,9 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
         $check = $conn->prepare("SELECT 1 FROM manga_favorites WHERE user_id = ? AND manga_id = ?");
         $check->bind_param("ii", $user_id, $manga_id);
         $check->execute();
-        $check_result = $check->get_result();
-
-        if ($check_result->num_rows === 0) {
+        if ($check->get_result()->num_rows === 0) {
             $stmt = $conn->prepare("INSERT INTO manga_favorites (user_id, manga_id) VALUES (?, ?)");
             $stmt->bind_param("ii", $user_id, $manga_id);
             $stmt->execute();
@@ -127,7 +126,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
                         </button>
                     <?php endif; ?>
                 </form>
+
+                <!-- Nút mở modal chấm điểm -->
+                <button type="button" class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#scoreModal">
+                    <i class="bi bi-star-fill me-1"></i> Chấm điểm
+                </button>
             <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Modal chấm điểm -->
+    <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" action="rate_manga.php" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scoreModalLabel">Chấm điểm Manga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="manga_id" value="<?= $manga['id'] ?>">
+                    <label for="score" class="form-label">Điểm (1-10):</label>
+                    <select name="score_given" id="score" class="form-select" required>
+                        <?php for ($i = 10; $i >= 1; $i--): ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -135,9 +163,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
     <h4>Bình luận</h4>
 
     <?php if (isset($_SESSION['user_id'])): ?>
+        <!-- Form bình luận -->
         <div class="d-flex mb-4">
             <img src="<?= $_SESSION['avatar'] ?? 'default-avatar.png' ?>" alt="avatar" width="50" height="50" class="rounded-circle me-3">
             <form action="post_comment.php" method="post" class="flex-grow-1">
+                <input type="hidden" name="type" value="manga">
                 <input type="hidden" name="manga_id" value="<?= $manga_id ?>">
                 <input type="hidden" name="parent_id" value="">
                 <textarea name="content" class="form-control mb-2" rows="2" placeholder="Viết bình luận..."></textarea>
@@ -148,16 +178,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
         <p>Bạn cần <a href="login.php">đăng nhập</a> để bình luận.</p>
     <?php endif; ?>
 
+    <!-- Danh sách bình luận -->
     <?php
-    $comment_sql = "SELECT c.*, u.username, u.avatar FROM manga_comments c
-                    JOIN users u ON c.user_id = u.id
-                    WHERE c.manga_id = ? AND c.parent_id IS NULL
-                    ORDER BY c.created_at DESC";
-    $comment_stmt = $conn->prepare($comment_sql);
+    $comment_stmt = $conn->prepare("SELECT c.*, u.username, u.avatar 
+                                    FROM manga_comments c 
+                                    JOIN users u ON c.user_id = u.id 
+                                    WHERE c.manga_id = ? AND c.parent_id IS NULL 
+                                    ORDER BY c.created_at DESC");
     $comment_stmt->bind_param("i", $manga_id);
     $comment_stmt->execute();
-    $comment_result = $comment_stmt->get_result();
-    ?>
+    $comment_result = $comment_stmt->get_result();?>
 
     <?php while ($cmt = $comment_result->fetch_assoc()): ?>
         <div class="d-flex mb-3">
@@ -170,6 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="#" class="reply-toggle text-decoration-none text-primary" data-id="<?= $cmt['id'] ?>">Phản hồi</a>
                     <form action="post_comment.php" method="post" class="reply-form mt-2 d-none">
+                        <input type="hidden" name="type" value="manga">
                         <input type="hidden" name="manga_id" value="<?= $manga_id ?>">
                         <input type="hidden" name="parent_id" value="<?= $cmt['id'] ?>">
                         <textarea name="content" class="form-control mb-2" rows="2" placeholder="Nhập phản hồi..."></textarea>

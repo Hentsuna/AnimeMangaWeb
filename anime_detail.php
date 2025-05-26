@@ -2,8 +2,7 @@
 include 'includes/header.php';
 include 'db.php';
 
-function time_elapsed_string($datetime, $full = false)
-{
+function time_elapsed_string($datetime, $full = false) {
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -28,14 +27,13 @@ function time_elapsed_string($datetime, $full = false)
     return $string ? implode(', ', $string) . ' trước' : 'vừa xong';
 }
 
-
-// Lấy ID từ URL
 $anime_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// Truy vấn thông tin anime, bao gồm director và season
-$stmt = $conn->prepare("SELECT a.*, d.name AS director_name, s.name AS season_name FROM anime a
-                        LEFT JOIN directors d ON a.director_id = d.id
-                        LEFT JOIN seasons s ON a.season_id = s.id
+// Truy vấn anime
+$stmt = $conn->prepare("SELECT a.*, d.name AS director_name, s.name AS season_name 
+                        FROM anime a 
+                        LEFT JOIN directors d ON a.director_id = d.id 
+                        LEFT JOIN seasons s ON a.season_id = s.id 
                         WHERE a.id = ?");
 $stmt->bind_param("i", $anime_id);
 $stmt->execute();
@@ -49,9 +47,9 @@ if ($result->num_rows === 0) {
 
 $anime = $result->fetch_assoc();
 
-// Truy vấn danh sách genres của anime
-$genre_stmt = $conn->prepare("SELECT g.name FROM genre g
-                              INNER JOIN anime_genre ag ON g.id = ag.genre_id
+// Truy vấn thể loại
+$genre_stmt = $conn->prepare("SELECT g.name FROM genre g 
+                              INNER JOIN anime_genre ag ON g.id = ag.genre_id 
                               WHERE ag.anime_id = ?");
 $genre_stmt->bind_param("i", $anime_id);
 $genre_stmt->execute();
@@ -61,34 +59,30 @@ while ($row = $genre_result->fetch_assoc()) {
     $genres[] = $row['name'];
 }
 
+// Kiểm tra yêu thích
 $is_favorited = false;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $check = $conn->prepare("SELECT 1 FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
     $check->bind_param("ii", $user_id, $anime_id);
     $check->execute();
-    $check_result = $check->get_result();
-    $is_favorited = $check_result->num_rows > 0;
+    $is_favorited = $check->get_result()->num_rows > 0;
 }
 
-
+// Xử lý yêu thích
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset($_SESSION['user_id'])) {
     $anime_id = (int)$_POST['anime_id'];
     $user_id = $_SESSION['user_id'];
 
     if (isset($_POST['unfavorite'])) {
-        // Huỷ yêu thích
         $stmt = $conn->prepare("DELETE FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
         $stmt->bind_param("ii", $user_id, $anime_id);
         $stmt->execute();
     } else {
-        // Thêm yêu thích nếu chưa có
         $check = $conn->prepare("SELECT 1 FROM anime_favorites WHERE user_id = ? AND anime_id = ?");
         $check->bind_param("ii", $user_id, $anime_id);
         $check->execute();
-        $check_result = $check->get_result();
-
-        if ($check_result->num_rows === 0) {
+        if ($check->get_result()->num_rows === 0) {
             $stmt = $conn->prepare("INSERT INTO anime_favorites (user_id, anime_id) VALUES (?, ?)");
             $stmt->bind_param("ii", $user_id, $anime_id);
             $stmt->execute();
@@ -98,7 +92,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
     header("Location: anime_detail.php?id=" . $anime_id);
     exit;
 }
-
 ?>
 
 <main class="container my-5">
@@ -147,19 +140,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
                         </button>
                     <?php endif; ?>
                 </form>
-            <?php endif; ?>
 
+                <!-- Nút mở popup chấm điểm -->
+                <button type="button" class="btn btn-warning mt-2" data-bs-toggle="modal" data-bs-target="#scoreModal">
+                    <i class="bi bi-star-fill me-1"></i> Chấm điểm
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Modal chấm điểm -->
+    <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" action="rate_anime.php" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scoreModalLabel">Chấm điểm Anime</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="anime_id" value="<?= $anime['id'] ?>">
+                    <label for="score" class="form-label">Điểm (1-10):</label>
+                    <select name="score_given" id="score" class="form-select" required>
+                        <?php for ($i = 10; $i >= 1; $i--): ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <hr class="my-5">
     <h4>Bình luận</h4>
 
+
     <?php if (isset($_SESSION['user_id'])): ?>
-        <!-- Khung nhập bình luận -->
+        <!-- Form bình luận -->
         <div class="d-flex mb-4">
             <img src="<?= $_SESSION['avatar'] ?? 'default-avatar.png' ?>" alt="avatar" width="50" height="50" class="rounded-circle me-3">
             <form action="post_comment.php" method="post" class="flex-grow-1">
+                <input type="hidden" name="type" value="anime">
                 <input type="hidden" name="anime_id" value="<?= $anime_id ?>">
                 <input type="hidden" name="parent_id" value="">
                 <textarea name="content" class="form-control mb-2" rows="2" placeholder="Viết bình luận..."></textarea>
@@ -172,11 +195,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
 
     <!-- Danh sách bình luận -->
     <?php
-    $comment_sql = "SELECT c.*, u.username, u.avatar FROM comments c
-                JOIN users u ON c.user_id = u.id
-                WHERE c.anime_id = ? AND c.parent_id IS NULL
-                ORDER BY c.created_at DESC";
-    $comment_stmt = $conn->prepare($comment_sql);
+    $comment_stmt = $conn->prepare("SELECT c.*, u.username, u.avatar 
+                                    FROM comments c 
+                                    JOIN users u ON c.user_id = u.id 
+                                    WHERE c.anime_id = ? AND c.parent_id IS NULL 
+                                    ORDER BY c.created_at DESC");
     $comment_stmt->bind_param("i", $anime_id);
     $comment_stmt->execute();
     $comment_result = $comment_stmt->get_result();
@@ -193,6 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="#" class="reply-toggle text-decoration-none text-primary" data-id="<?= $cmt['id'] ?>">Phản hồi</a>
                     <form action="post_comment.php" method="post" class="reply-form mt-2 d-none">
+                        <input type="hidden" name="type" value="anime">
                         <input type="hidden" name="anime_id" value="<?= $anime_id ?>">
                         <input type="hidden" name="parent_id" value="<?= $cmt['id'] ?>">
                         <textarea name="content" class="form-control mb-2" rows="2" placeholder="Nhập phản hồi..."></textarea>
@@ -234,8 +258,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
             });
         });
     </script>
-
-
 </main>
 
 <?php include 'includes/footer.php'; ?>
