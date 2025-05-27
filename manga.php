@@ -18,7 +18,7 @@ $result = mysqli_query($conn, $sql);
 ?>
 
 <main class="container my-5">
-    <h1 class="text-center mb-4">Top Manga</h1>
+    <h1 class="text-center mb-4">Manga</h1>
     <div class="row g-4">
 
         <?php while ($manga = mysqli_fetch_assoc($result)) : ?>
