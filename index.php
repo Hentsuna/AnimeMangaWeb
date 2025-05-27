@@ -15,7 +15,7 @@
     include 'includes/header.php';
     include 'db.php';
 
-    $top_manga = $conn->query("SELECT * FROM manga ORDER BY score DESC LIMIT 20");
+    $top_manga = $conn->query("SELECT * FROM manga ORDER BY score DESC LIMIT 10");
 
     // Truy vấn từng nhóm
     $airing = $conn->query("SELECT * FROM anime WHERE status = 'airing' ORDER BY score DESC LIMIT 5");
@@ -27,13 +27,13 @@
     <main class="container py-5">
         <h2 class="h4 fw-bold mb-3">Top Manga</h2>
         <div class="position-relative">
-            <button class="btn btn-danger position-absolute top-50 start-0 translate-middle-y z-3 d-flex align-items-center justify-content-center"
-                id="scrollLeft" style="width: 40px; height: 40px; padding: 0;">
+            <button class="btn btn-danger position-absolute top-50 start-0 translate-middle-y"
+                id="scrollLeft"
+                style="width: 40px; height: 40px; padding: 0; margin-left: -10px; z-index: 1050;">
                 <i class="bi bi-chevron-left fs-4"></i>
             </button>
 
-
-            <div class="d-flex overflow-auto px-5" id="mangaCarousel" style="scroll-behavior: smooth;">
+            <div class="d-flex overflow-auto ps-5 pe-5" id="mangaCarousel" style="scroll-behavior: smooth;">
                 <?php while ($manga = $top_manga->fetch_assoc()): ?>
                     <div class="card mx-2" style="min-width: 180px;">
                         <img src="<?= $manga['image'] ?>" class="card-img-top" style="height: 240px; object-fit: cover;">
@@ -47,8 +47,9 @@
                 <?php endwhile; ?>
             </div>
 
-            <button class="btn btn-danger position-absolute top-50 end-0 translate-middle-y z-3 d-flex align-items-center justify-content-center"
-                id="scrollRight" style="width: 40px; height: 40px; padding: 0;">
+            <button class="btn btn-danger position-absolute top-50 end-0 translate-middle-y"
+                id="scrollRight"
+                style="width: 40px; height: 40px; padding: 0; z-index: 1050;">
                 <i class="bi bi-chevron-right fs-4"></i>
             </button>
         </div>

@@ -25,6 +25,8 @@ if (file_exists($image_path)) {
 
 // Xoá dữ liệu liên quan trong bảng con
 mysqli_query($conn, "DELETE FROM anime_favorites WHERE anime_id = $id");
+mysqli_query($conn, "DELETE FROM comments WHERE anime_id = $id");
+
 
 // Xoá bản ghi anime
 if (mysqli_query($conn, "DELETE FROM anime WHERE id = $id")) {
