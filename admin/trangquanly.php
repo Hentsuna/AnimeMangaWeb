@@ -4,7 +4,7 @@
         <div class="menuu">
             <a style=" text-decoration: none;" href="<?php echo $domain ?>/admin">
                 <div style="padding-top: 20px; padding-left: 5px;">
-                    <img style="width: 70px; height: 100px; float: left; padding-right: 5px" src="../images/logo/HH_Chan.webp">
+                    <img style="width: 70px; height: 100px; float: left; padding-right: 5px" src="./image/HH_Chan.webp">
                     <span style="color: #FF7610;">Administrators</span>
                 </div>
             </a>

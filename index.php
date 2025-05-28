@@ -29,7 +29,7 @@
         <div class="position-relative">
             <button class="btn btn-danger position-absolute top-50 start-0 translate-middle-y"
                 id="scrollLeft"
-                style="width: 40px; height: 40px; padding: 0; margin-left: -10px; z-index: 1050;">
+                style="width: 40px; height: 40px; padding: 0; margin-left: -10px; z-index: 100;">
                 <i class="bi bi-chevron-left fs-4"></i>
             </button>
 
@@ -49,7 +49,7 @@
 
             <button class="btn btn-danger position-absolute top-50 end-0 translate-middle-y"
                 id="scrollRight"
-                style="width: 40px; height: 40px; padding: 0; z-index: 1050;">
+                style="width: 40px; height: 40px; padding: 0; z-index: 100;">
                 <i class="bi bi-chevron-right fs-4"></i>
             </button>
         </div>
@@ -68,7 +68,6 @@
                             <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
                             <small class="text-muted">
                                 <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
-                                <?= number_format($row['members']) ?> members
                             </small>
                         </div>
                     </div>
@@ -87,7 +86,6 @@
                             <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
                             <small class="text-muted">
                                 <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
-                                <?= number_format($row['members']) ?> members
                             </small>
                         </div>
                     </div>
@@ -107,7 +105,6 @@
                             <a href="anime_detail.php?id=<?= $row['id'] ?>" class="fw-semibold d-block"><?= htmlspecialchars($row['title']) ?></a>
                             <small class="text-muted">
                                 <?= $row['episodes'] ?> eps, scored <?= $row['score'] ?? 'N/A' ?><br>
-                                <?= number_format($row['members']) ?> members
                             </small>
                         </div>
                     </div>
@@ -121,14 +118,42 @@
 
     <script>
         const carousel = document.getElementById('mangaCarousel');
-        document.getElementById('scrollLeft').onclick = () => carousel.scrollBy({
-            left: -300,
-            behavior: 'smooth'
-        });
-        document.getElementById('scrollRight').onclick = () => carousel.scrollBy({
-            left: 300,
-            behavior: 'smooth'
-        });
+        const scrollAmount = 300;
+
+        document.getElementById('scrollRight').onclick = () => {
+            const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+            const currentScroll = carousel.scrollLeft;
+
+            if (currentScroll >= maxScrollLeft - 10) {
+                // Đã đến cuối → quay về đầu
+                carousel.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                carousel.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        };
+
+        document.getElementById('scrollLeft').onclick = () => {
+            const currentScroll = carousel.scrollLeft;
+
+            if (currentScroll <= 10) {
+                // Đang ở đầu → cuộn tới cuối
+                carousel.scrollTo({
+                    left: carousel.scrollWidth,
+                    behavior: 'smooth'
+                });
+            } else {
+                carousel.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        };
     </script>
 
 </body>
