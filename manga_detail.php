@@ -100,12 +100,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['manga_id']) && isset(
         <div class="col-md-8">
             <h2 class="mb-3"><?= htmlspecialchars($manga['title']) ?></h2>
             <div class="row mb-2">
+                <div class="col-sm-4 fw-bold">Điểm:</div>
+                <div class="col-sm-8"><?= $manga['score'] ?? 'N/A' ?></div>
+            </div>
+            <div class="row mb-2">
                 <div class="col-sm-4 fw-bold">Tác giả:</div>
                 <div class="col-sm-8"><?= htmlspecialchars($manga['author_name'] ?? 'Không rõ') ?></div>
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4 fw-bold">Số chương:</div>
                 <div class="col-sm-8"><?= $manga['chapters'] ?></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-4 fw-bold">Trạng thái:</div>
+                <div class="col-sm-8"><?= htmlspecialchars($manga['status']) ?></div>
             </div>
             <div class="row mb-2">
                 <div class="col-sm-4 fw-bold">Thể loại:</div>

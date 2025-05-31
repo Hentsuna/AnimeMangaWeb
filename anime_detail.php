@@ -102,30 +102,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['anime_id']) && isset(
         <div class="col-md-8">
             <h2 class="mb-3"><?= htmlspecialchars($anime['title']) ?></h2>
             <div class="row mb-2">
-                <div class="col-sm-4 fw-bold">Score:</div>
+                <div class="col-sm-4 fw-bold">Điểm:</div>
                 <div class="col-sm-8"><?= $anime['score'] ?? 'N/A' ?></div>
             </div>
             <div class="row mb-2">
-                <div class="col-sm-4 fw-bold">Status:</div>
+                <div class="col-sm-4 fw-bold">Trạng thái:</div>
                 <div class="col-sm-8"><?= htmlspecialchars($anime['status']) ?></div>
             </div>
             <div class="row mb-2">
-                <div class="col-sm-4 fw-bold">Episodes:</div>
+                <div class="col-sm-4 fw-bold">Số tập:</div>
                 <div class="col-sm-8"><?= $anime['episodes'] ?></div>
             </div>
             <div class="row mb-2">
-                <div class="col-sm-4 fw-bold">Genres:</div>
+                <div class="col-sm-4 fw-bold">Thể loại:</div>
                 <div class="col-sm-8"><?= htmlspecialchars(implode(', ', $genres)) ?></div>
             </div>
             <div class="row mb-2">
-                <div class="col-sm-4 fw-bold">Director:</div>
+                <div class="col-sm-4 fw-bold">Đạo diễn:</div>
                 <div class="col-sm-8"><?= htmlspecialchars($anime['director_name'] ?? 'Unknown') ?></div>
             </div>
             <div class="row mb-4">
-                <div class="col-sm-4 fw-bold">Season:</div>
+                <div class="col-sm-4 fw-bold">Mùa:</div>
                 <div class="col-sm-8"><?= htmlspecialchars($anime['season_name'] ?? 'Unknown') ?></div>
             </div>
-            <p><strong>Description:</strong><br><?= nl2br(htmlspecialchars($anime['description'])) ?></p>
+            <p><strong>Mô tả:</strong><br><?= nl2br(htmlspecialchars($anime['description'])) ?></p>
 
             <?php if (isset($_SESSION['user_id'])): ?>
                 <form method="post" class="mt-3">
