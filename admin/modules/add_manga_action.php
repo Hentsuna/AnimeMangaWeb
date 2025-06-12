@@ -35,10 +35,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "sdsssiii", $title, $score, $image_url, $description, $status, $chapters, $volumes, $author_id);
 
+    // if (mysqli_stmt_execute($stmt)) {
+    //     echo "✅ Thêm manga thành công!";
+    //     echo "<br><a href='../add_manga.php'>Thêm manga khác</a>";
+    //     echo " | <a href='../quanlymanga.php'>Quản lý manga</a>";
+    // } else {
+    //     echo "❌ Lỗi khi thêm manga: " . mysqli_error($conn);
+    // }
+
     if (mysqli_stmt_execute($stmt)) {
-        echo "✅ Thêm manga thành công!";
-        echo "<br><a href='../add_manga.php'>Thêm manga khác</a>";
-        echo " | <a href='../quanlymanga.php'>Quản lý manga</a>";
+        echo "✅ Thêm manga thành công.";
+        echo '<script>
+        setTimeout(function() {
+            window.location.href = "../admin/?chucnang=quanlymanga#";
+        }, 1000);
+    </script>';
+        exit;
     } else {
         echo "❌ Lỗi khi thêm manga: " . mysqli_error($conn);
     }
@@ -48,4 +60,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo "❌ Truy cập không hợp lệ.";
 }
-?>

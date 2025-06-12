@@ -35,10 +35,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "sdsssiii", $title, $score, $image_url, $description, $status, $episodes, $season_id, $director_id);
 
+    // if (mysqli_stmt_execute($stmt)) {
+    //     echo "✅ Thêm anime thành công!";
+    //     echo "<br><a href='../addanime.php'>Thêm anime khác</a>";
+    //     echo " | <a href='../quanlyanime.php'>Quản lý anime</a>";
+    // } else {
+    //     echo "❌ Lỗi khi thêm anime: " . mysqli_error($conn);
+    // }
+
     if (mysqli_stmt_execute($stmt)) {
-        echo "✅ Thêm anime thành công!";
-        echo "<br><a href='../addanime.php'>Thêm anime khác</a>";
-        echo " | <a href='../quanlyanime.php'>Quản lý anime</a>";
+        echo "✅ Thêm anime thành công.";
+        echo '<script>
+        setTimeout(function() {
+            window.location.href = "../admin/?chucnang=quanlyanime#";
+        }, 1000);
+    </script>';
+        exit;
     } else {
         echo "❌ Lỗi khi thêm anime: " . mysqli_error($conn);
     }
@@ -48,4 +60,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo "❌ Truy cập không hợp lệ.";
 }
-?>
