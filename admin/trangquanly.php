@@ -65,7 +65,7 @@
                             </div>
                         </button>
                     </form>
-                    <form method="get" action="#">
+                    <!-- <form method="get" action="#">
                         <input name="chucnang" value="tuychonmenu" style="display: none">
                         <button class="btnkgvien">
                             <div class="line-menu-lv2" style="color:#f8f8f8;">
@@ -73,11 +73,11 @@
                                 Tùy chọn menu
                             </div>
                         </button>
-                    </form>
+                    </form> -->
                 </div>
             </div>
 
-            <?php
+            <!-- <?php
             echo '<form method="get" action="#">
                 <input name = "chucnang" value="duyetsach" style="display: none">
                 <button class="btnkgvien">
@@ -86,7 +86,7 @@
                         Người dùng</div>
                 </button>
             </form>';
-            ?>
+            ?> -->
             <form method="get" action="#">
                 <input name="chucnang" value="quanlyanime" style="display: none">
                 <button class="btnkgvien">

@@ -60,9 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </span>
             </div>
             <small id="passwordHint" class="form-text text-muted" style="display: none;">Mật khẩu tối đa 8 ký tự.</small>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+                <a href="quen-mat-khau.php" class="text-decoration-none">Quên mật khẩu?</a>
+                
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Đăng Nhập</button>
     </form>
 
     <script>
